@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeJournal Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <div class="nav__brand">
+                <h2>TradeJournal Pro</h2>
+            </div>
+            <div class="nav__menu">
+                <button class="nav__item nav__item--active" data-view="dashboard" type="button">Dashboard</button>
+                <button class="nav__item" data-view="trades" type="button">Trades</button>
+                <button class="nav__item" data-view="analytics" type="button">Analytics</button>
+                <button class="nav__item" data-view="settings" type="button">Settings</button>
+            </div>
+            <button class="btn btn--primary" id="addTradeBtn" type="button">Add Trade</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Dashboard View -->
+        <div id="dashboard" class="view view--active">
+            <div class="container">
+                <div class="view__header">
+                    <h1>Dashboard</h1>
+                    <p class="view__subtitle">Your trading performance overview</p>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Total P&L</span>
+                        </div>
+                        <div class="metric-card__value" id="totalPnl">$0.00</div>
+                        <div class="metric-card__change" id="totalPnlChange">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Win Rate</span>
+                        </div>
+                        <div class="metric-card__value" id="winRate">0%</div>
+                        <div class="metric-card__change" id="winRateChange">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Total Trades</span>
+                        </div>
+                        <div class="metric-card__value" id="totalTrades">0</div>
+                        <div class="metric-card__change" id="totalTradesChange">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Profit Factor</span>
+                        </div>
+                        <div class="metric-card__value" id="profitFactor">0.00</div>
+                        <div class="metric-card__change" id="profitFactorChange">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Avg Win</span>
+                        </div>
+                        <div class="metric-card__value" id="avgWin">$0.00</div>
+                        <div class="metric-card__change" id="avgWinChange">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card__header">
+                            <span class="metric-card__label">Avg Loss</span>
+                        </div>
+                        <div class="metric-card__value" id="avgLoss">$0.00</div>
+                        <div class="metric-card__change" id="avgLossChange">--</div>
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div class="calendar-section">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="calendar-header">
+                                <h3>Trading Calendar</h3>
+                                <div class="calendar-controls">
+                                    <button class="btn btn--outline btn--sm" id="prevMonth">&lt;</button>
+                                    <span id="currentMonth">August 2025</span>
+                                    <button class="btn btn--outline btn--sm" id="nextMonth">&gt;</button>
+                                    <button class="btn btn--outline btn--sm" id="thisMonth">This month</button>
+                                </div>
+                            </div>
+                            <div class="calendar-container">
+                                <div class="calendar-main">
+                                    <div class="calendar-grid">
+                                        <div class="calendar-weekdays">
+                                            <div class="calendar-weekday">Sun</div>
+                                            <div class="calendar-weekday">Mon</div>
+                                            <div class="calendar-weekday">Tue</div>
+                                            <div class="calendar-weekday">Wed</div>
+                                            <div class="calendar-weekday">Thu</div>
+                                            <div class="calendar-weekday">Fri</div>
+                                            <div class="calendar-weekday">Sat</div>
+                                        </div>
+                                        <div class="calendar-days" id="calendarDays">
+                                            <!-- Calendar days will be generated here -->
+                                        </div>
+                                    </div>
+                                    <div class="calendar-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-label">Total P&L:</span>
+                                            <span class="stat-value" id="monthlyPnl">$0.00</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">Trading Days:</span>
+                                            <span class="stat-value" id="monthlyTradingDays">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="calendar-sidebar">
+                                    <h4>Weekly Summary</h4>
+                                    <div id="weeklySummary">
+                                        <!-- Weekly summary will be generated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Trades -->
+                <div class="recent-trades">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="flex justify-between items-center mb-8">
+                                <h3>Recent Trades</h3>
+                                <button class="btn btn--outline btn--sm" id="viewAllTradesBtn" type="button">View All</button>
+                            </div>
+                            <div id="recentTradesTable" class="trades-table">
+                                <!-- Recent trades will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trades View -->
+        <div id="trades" class="view">
+            <div class="container">
+                <div class="view__header">
+                    <h1>Trade History</h1>
+                    <p class="view__subtitle">Manage and analyze your trades</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-section">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="filters-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Symbol</label>
+                                    <input type="text" class="form-control" id="symbolFilter" placeholder="Filter by symbol">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Account</label>
+                                    <input type="text" class="form-control" id="accountFilter" placeholder="Filter by account">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Result</label>
+                                    <select class="form-control" id="resultFilter">
+                                        <option value="">All Results</option>
+                                        <option value="win">Wins Only</option>
+                                        <option value="loss">Losses Only</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn--secondary" id="clearFilters" type="button" style="margin-top: 20px;">Clear Filters</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trades Table -->
+                <div class="trades-section">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="flex justify-between items-center mb-8">
+                                <h3>All Trades</h3>
+                                <div class="flex gap-8">
+                                    <button class="btn btn--outline btn--sm" id="exportTrades" type="button">Export CSV</button>
+                                </div>
+                            </div>
+                            <div id="tradesTable" class="trades-table">
+                                <!-- Trades table will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics View -->
+        <div id="analytics" class="view">
+            <div class="container">
+                <div class="view__header">
+                    <h1>Analytics</h1>
+                    <p class="view__subtitle">Deep dive into your trading performance</p>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="analytics-metrics">
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Detailed Performance Metrics</h3>
+                            <div class="metrics-detailed">
+                                <div class="metric-row">
+                                    <span class="metric-label">Average R-Multiple:</span>
+                                    <span class="metric-value" id="avgRMultiple">0.00</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Best Trade:</span>
+                                    <span class="metric-value" id="bestTrade">$0.00</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Worst Trade:</span>
+                                    <span class="metric-value" id="worstTrade">$0.00</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Consecutive Wins:</span>
+                                    <span class="metric-value" id="consecutiveWins">0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Consecutive Losses:</span>
+                                    <span class="metric-value" id="consecutiveLosses">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="analytics-charts">
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Win/Loss Distribution</h3>
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="winLossChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Performance by Account</h3>
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="accountChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settings" class="view">
+            <div class="container">
+                <div class="view__header">
+                    <h1>Settings</h1>
+                    <p class="view__subtitle">Manage your preferences and data</p>
+                </div>
+
+                <div class="settings-sections">
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>Data Management</h3>
+                            <div class="settings-group">
+                                <div class="flex justify-between items-center mb-8">
+                                    <div>
+                                        <h4>Export All Data</h4>
+                                        <p>Download all your trades as a CSV file</p>
+                                    </div>
+                                    <button class="btn btn--outline" id="exportAllData" type="button">Export Data</button>
+                                </div>
+                                <div class="flex justify-between items-center mb-8">
+                                    <div>
+                                        <h4>Import Data</h4>
+                                        <p>Import trades from a CSV file</p>
+                                    </div>
+                                    <input type="file" id="importData" accept=".csv" style="display: none;">
+                                    <button class="btn btn--outline" id="importDataBtn" type="button">Import Data</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4>Clear All Data</h4>
+                                        <p>Permanently delete all trades (cannot be undone)</p>
+                                    </div>
+                                    <button class="btn btn--outline" id="clearAllData" type="button" style="color: var(--color-error); border-color: var(--color-error);">Clear Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Trade Modal -->
+    <div id="addTradeModal" class="modal hidden">
+        <div class="modal__overlay"></div>
+        <div class="modal__content modal__content--wide">
+            <div class="modal__header">
+                <h3 id="modalTitle">Add New Trade</h3>
+                <button class="modal__close" type="button">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="tradeForm">
+                    <div class="trade-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Symbol *</label>
+                            <input type="text" class="form-control" id="tradeSymbol" placeholder="AAPL" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Account Type *</label>
+                            <input type="text" class="form-control" id="tradeAccount" placeholder="Main Account" required>
+                        </div>
+                    </div>
+                    
+                    <div class="executions-section">
+                        <div class="executions-header">
+                            <h4>Executions</h4>
+                            <button type="button" class="btn btn--primary btn--sm" id="addExecutionBtn">Create new execution</button>
+                        </div>
+                        
+                        <div class="executions-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Qty</th>
+                                        <th>Side</th>
+                                        <th>Price</th>
+                                        <th>Comm ($)</th>
+                                        <th>Fee ($)</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="executionsTableBody">
+                                    <!-- Execution rows will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" id="tradeNotes" rows="3" placeholder="Trade notes and observations..."></textarea>
+                    </div>
+                    
+                    <div class="calculated-fields">
+                        <div class="calc-field">
+                            <span class="calc-label">Total P&L:</span>
+                            <span class="calc-value" id="calculatedPnl">$0.00</span>
+                        </div>
+                        <div class="calc-field">
+                            <span class="calc-label">Net Quantity:</span>
+                            <span class="calc-value" id="calculatedQty">0</span>
+                        </div>
+                        <div class="calc-field">
+                            <span class="calc-label">Avg Price:</span>
+                            <span class="calc-value" id="calculatedAvgPrice">$0.00</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal__footer">
+                <button type="button" class="btn btn--outline" id="cancelTrade">Cancel</button>
+                <button type="submit" class="btn btn--primary" id="saveTrade" form="tradeForm">Save Trade</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal at the end of the body -->
+    <div id="daySummaryModal" class="modal hidden">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="daySummaryTitle">Day Summary</h3>
+                <button class="modal__close" type="button" onclick="closeDaySummaryModal()">&times;</button>
+            </div>
+            <div class="modal__body">
+                <div id="dayTradesSummary">
+                    <!-- Trades summary for the day will be populated here -->
+                </div>
+                <div class="form-group">
+                    <button class="btn btn--primary" onclick="editNote()">Edit Note</button>
+                    <textarea id="dayNote" class="form-control" rows="3" placeholder="Enter your notes here..."></textarea>
+                </div>
+            </div>
+            <div class="modal__footer">
+                <button class="btn btn--outline" onclick="closeDaySummaryModal()">Close</button>
+                <button class="btn btn--primary" onclick="saveDayNote()">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal at the end of the body --> 
+    <div id="chartModal" class="modal hidden">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="chartTitle">Price Chart</h3>
+                <button class="modal__close" type="button" onclick="closeChartModal()">&times;</button>
+            </div>
+            <div class="modal__body">
+                <div id="tickerChart" style="height: 400px;"></div> <!-- Changed from canvas to div -->
+            </div>
+            <div class="modal__footer">
+                <button class="btn btn--outline" onclick="closeChartModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
