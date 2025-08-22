@@ -34,49 +34,18 @@
                     <p class="view__subtitle">Your trading performance overview</p>
                 </div>
 
-                <!-- Key Metrics -->
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Total P&L</span>
+                <!-- Account Filter -->
+                <div class="filter-section">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="form-group">
+                                <label class="form-label">Account Filter</label>
+                                <select class="form-control" id="accountFilter" onchange="filterByAccount()">
+                                    <option value="">All Accounts</option>
+                                    <!-- Options will be populated dynamically by JavaScript -->
+                                </select>
+                            </div>
                         </div>
-                        <div class="metric-card__value" id="totalPnl">$0.00</div>
-                        <div class="metric-card__change" id="totalPnlChange">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Win Rate</span>
-                        </div>
-                        <div class="metric-card__value" id="winRate">0%</div>
-                        <div class="metric-card__change" id="winRateChange">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Total Trades</span>
-                        </div>
-                        <div class="metric-card__value" id="totalTrades">0</div>
-                        <div class="metric-card__change" id="totalTradesChange">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Profit Factor</span>
-                        </div>
-                        <div class="metric-card__value" id="profitFactor">0.00</div>
-                        <div class="metric-card__change" id="profitFactorChange">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Avg Win</span>
-                        </div>
-                        <div class="metric-card__value" id="avgWin">$0.00</div>
-                        <div class="metric-card__change" id="avgWinChange">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-card__header">
-                            <span class="metric-card__label">Avg Loss</span>
-                        </div>
-                        <div class="metric-card__value" id="avgLoss">$0.00</div>
-                        <div class="metric-card__change" id="avgLossChange">--</div>
                     </div>
                 </div>
 
@@ -341,7 +310,8 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Date & Time</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
                                         <th>Qty</th>
                                         <th>Side</th>
                                         <th>Price</th>

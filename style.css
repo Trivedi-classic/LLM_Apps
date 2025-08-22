@@ -1643,3 +1643,26 @@ select.form-control {
   max-width: 100%;
   height: auto;
 }
+
+/* Add these styles to support the date-time input layout */
+.date-time-inputs {
+  display: flex;
+  gap: 5px;
+}
+
+.execution-date,
+.execution-time {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.execution-date {
+  flex: 3;
+}
+
+.execution-time {
+  flex: 2;
+}
